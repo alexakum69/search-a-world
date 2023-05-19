@@ -1,0 +1,39 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.probability import FreqDist
+
+# Завантаження стоп-слів
+nltk.download('stopwords')
+nltk.download('punkt')
+
+def get_keywords(text):
+    # Розбиваємо текст на слова
+    tokens = word_tokenize(text.lower())
+    
+    # Вилучаємо стоп-слова
+    stop_words = set(stopwords.words('english'))  # Замініть 'english' на відповідну мову
+    filtered_tokens = [word for word in tokens if word.isalnum() and word not in stop_words]
+    
+    # Обчислюємо частотний розподіл слів
+    fdist = FreqDist(filtered_tokens)
+    
+    # Визначаємо кількість ключових слів, яку хочемо отримати
+    num_keywords = 5
+    
+    # Отримуємо перші num_keywords найбільш частотних слів
+    keywords = fdist.most_common(num_keywords)
+    
+    return keywords
+
+# Приклад використання
+article = """
+This is a sample article. It contains some example text for demonstrating the keyword extraction code. The code uses NLTK library in Python for natural language processing. The keywords in this article will be extracted based on their frequency.
+"""
+
+# Отримуємо ключові слова зі статті
+keywords = get_keywords(article)
+
+# Виводимо ключові слова
+for keyword, frequency in keywords:
+    print(keyword, "-", frequency)
